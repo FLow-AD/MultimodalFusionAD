@@ -55,3 +55,8 @@ def fit_early(X, y, random_seed=123):
   model = LinearDiscriminantAnalysis(solver='svd', store_covariance=True) #it can be any ML models
   return model.fit(X, y)
 
+def interpret_model(X_test: np.ndarray, y_test: np.ndarray, model: BaseEstimator, random_seed=123):
+  class_names = ['Cognitive Normal', 'Mild Cognitive Impairment', "Alzheimer's Disease"]
+  explainer = shap.LinearExplainer(model, X_test, output_names=class_names) # it shall fit the type of models, e.g. Linear for Linear Discriminant Analysis
+  shap_values = explainer.shap_values(X_test)
+  return shap_values
