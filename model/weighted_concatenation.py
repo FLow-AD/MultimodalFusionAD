@@ -1,5 +1,12 @@
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.metrics import balanced_accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.neural_network import MLPClassifier
+from sklearn.tree import DecisionTreeClassifier
+from catboost import CatBoostClassifier
+from logitboost import LogitBoost
+from xgboost import XGBClassifier
+from sklearn.svm import SVC
 import pandas as pd
 import numpy as np
 
@@ -49,21 +56,7 @@ def weighted_concatenation(train_set, test_set, weight_df, classifier='SVM - Lin
 
   return tr_swc, tst_swc, train_y, test_y
 
-def predict_early(X_train, X_test, y_train, y_test, average='weighted', random_seed=123):
+def fit_early(X, y, random_seed=123):
   model = LinearDiscriminantAnalysis(solver='svd', store_covariance=True) #it can be any ML models
-  model.fit(X_train, y_train)
-  
-  dec_fn = model.decision_function(X_test)
-  predict = model.predict(X_test)
-  pred_prob = model.predict_proba(X_test)
-  cnf_mat = confusion_matrix(y_test, predict, normalize=None)
-
-  metrics = {}
-  metrics['BA'] = balanced_accuracy_score(y_test, y_pred)
-  metrics['SEN'] = recall_score(y_test, y_pred, average=average)
-  metrics['SPE'] = specificity_score(y_test, y_pred, average=average)
-  metrics['AUC'] = roc_auc_score(y_test, pred_prob, multi_class="ovr", average=average)
-  metrics['MCC'] = matthews_corrcoef(y_test, y_pred)
-  
-  return cnf_mat, metrics
+  return model.fit(X, y)
 
