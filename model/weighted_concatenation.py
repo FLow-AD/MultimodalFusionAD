@@ -10,11 +10,8 @@ from sklearn.svm import SVC
 import pandas as pd
 import numpy as np
 
-def predict_standalone(train_data, test_data, train_label, test_label, random_seed=123):
-  features = train_raw_data[k].columns 
-  X_train = train_data
-  X_test = test_data
-
+def predict_standalone(X_train, X_test, train_label, test_label, random_seed=123):
+  features = X_train.columns 
   BA_alone = []
   for var in features:
     y_train = train_label[k].values
@@ -28,7 +25,6 @@ def predict_standalone(train_data, test_data, train_label, test_label, random_se
 
   weight_vector = 1 - np.max(BA_alone) + BA_alone
   weight_df = pd.DataFrame([features, BA_alone, weight_vector]).T
-
   return weight_df
 
 def weighted_concatenation(train_set, test_set, weight_df, classifier='SVM - Linear'):
