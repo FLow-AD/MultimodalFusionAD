@@ -10,12 +10,10 @@ from sklearn.svm import SVC
 import pandas as pd
 import numpy as np
 
-def predict_standalone(X_train, X_test, train_label, test_label, random_seed=123):
+def predict_standalone(X_train, X_test, y_train, y_test, random_seed=123):
   features = X_train.columns 
   BA_alone = []
   for var in features:
-    y_train = train_label[k].values
-    y_test = test_label[k].values 
     Xtr = X_train[var].to_numpy()
     Xtst = X_test[var].to_numpy()
     model = LinearDiscriminantAnalysis(solver='svd', store_covariance=True) #it can be any ML models
@@ -36,6 +34,7 @@ def weighted_concatenation(train_set, test_set, weight_df, classifier='SVM - Lin
     test_X = test_set.drop('y', axis=1)
     test_y = test_set['y']
 
+    # separate the categorical from numerical features
     categorical = [col for col in cols if train_X[col].dtype == 'category']
     numerical = list(set(cols) - set(categorical))
 
